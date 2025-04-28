@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Footprint Results</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('{{ url_for("static", filename="images/bg.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #f7f7f7;
+        }
+
+        /* Navbar container styles */
+        .navbar-container {
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar {
+            padding: 12px 20px;
+            min-height: 60px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .result-container {
+            border-radius: 0;
+            padding: 30px;
+            width: 100%;
+            max-width: 35%;
+            margin: 20px auto;
+            text-align: center;
+            background-color: rgb(72, 69, 69);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h3 {
+            color: #e1eaf6;
+        }
+
+        p {
+            font-weight: bold;
+            color: #e7e2e2;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            width: 400px; /* Set fixed width */
+            height: 400px; /* Set fixed height */
+            box-shadow: 0 2px 8px rgba(95, 93, 93, 0.05);
+        }
+
+        .chart-row {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer {
+            border-radius: 0;
+            padding: 30px;
+            width: 100%;
+            max-width: 20%;
+            margin: 20px auto;
+            text-align: center;
+            background-color: rgb(105, 98, 98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        a {
+            padding: 10px 20px;
+            color: #007BFF;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body class="water-index-page">
+    
+    <!-- Navbar -->
+    <div class="navbar-container">
+        {% include 'navbar.html' %}
+    </div>
+
+    <!-- Results -->
+    <div class="result-container">
+        <h1>Water Footprint Results</h1>
+        <h3>For {{ crop }} on {{ area }} hectares of land:</h3>
+        <p id="blueResult"></p>
+        <p id="greenResult"></p>
+        <p id="grayResult"></p>
+        <p id="totalResult"></p>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-row">
+        <div class="chart-container">
+            <canvas id="pieChart" width="100" height="100"></canvas>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <a href="{{ url_for('cropwater_bp.water_index') }}">Calculate Again</a>
+    </div>
+
+    <script>
+        const area = {{ area }};
+        const bluePerHectare = 500;
+        const greenPerHectare = 700;
+        const grayPerHectare = 600;
+
+        const blueFootprint = area * bluePerHectare;
+        const greenFootprint = area * greenPerHectare;
+        const grayFootprint = area * grayPerHectare;
+        const totalFootprint = blueFootprint + greenFootprint + grayFootprint;
+
+        // Display values
+        document.getElementById("blueResult").textContent = `Blue water footprint: ${blueFootprint.toFixed(2)} m³`;
+        document.getElementById("greenResult").textContent = `Green water footprint: ${greenFootprint.toFixed(2)} m³`;
+        document.getElementById("grayResult").textContent = `Gray water footprint: ${grayFootprint.toFixed(2)} m³`;
+        document.getElementById("totalResult").textContent = `Total water footprint: ${totalFootprint.toFixed(2)} m³`;
+
+        // Pie Chart
+        new Chart(document.getElementById('pieChart'), {
+            type: 'pie',
+            data: {
+                labels: ['Blue', 'Green', 'Gray'],
+                datasets: [{
+                    data: [
+                        (blueFootprint / totalFootprint) * 100,
+                        (greenFootprint / totalFootprint) * 100,
+                        (grayFootprint / totalFootprint) * 100
+                    ],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 99, 132, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Water Footprint Distribution (%)'
+                    },
+                    legend: {
+                        labels: {
+                            color: '#000'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AgroSense Usage Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h1, h2 { color: #2d6a4f; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+        td, th { padding: 10px; border: 1px solid #ccc; }
+        img { max-width: 400px; height: auto; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <h1>AgroSense Usage Report</h1>
+    <p><strong>User:</strong> {{ user.name }} ({{ user.email }})</p>
+
+    <h2>Weed Detection</h2>
+    {% if weed_image_path %}
+        <img src="{{ weed_image_path }}" alt="Weed Detection Result">
+    {% endif %}
+
+    {% if weed_output %}
+        {% for result in weed_output %}
+        <div class="result-box">
+            <p><strong>Class:</strong> {{ result.class }}</p>
+            <p><strong>Accuracy:</strong> {{ result.score }}%</p>
+            <p><strong>Bounding Box:</strong> {{ result.bbox }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No weed detection data available.</p>
+    {% endif %}
+
+    <h2>Water Footprint Analysis</h2>
+    <table>
+        <tr><td>Crop:</td><td>{{ water_data.crop }}</td></tr>
+        <tr><td>Area:</td><td>{{ water_data.area }} hectares</td></tr>
+        <tr><td>Blue Water:</td><td>{{ water_data.blue }} m³</td></tr>
+        <tr><td>Green Water:</td><td>{{ water_data.green }} m³</td></tr>
+        <tr><td>Gray Water:</td><td>{{ water_data.gray }} m³</td></tr>
+        <tr><td><strong>Total Water Footprint:</strong></td><td><strong>{{ water_data.total }} m³</strong></td></tr>
+    </table>
+
+    <p><em>Report generated on: {{ now().strftime('%d-%m-%Y %H:%M:%S') }}</em></p>
+</body>
+</html>

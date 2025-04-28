@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Footprint Calculation</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Specific styles for Water Index page */
+        body.water-index-page .navbar {
+            padding: 10px 0; /* Adjust height of navbar specifically for this page */
+        }
+
+        /* Override navbar for Water Index page */
+        body.water-index-page .navbar-container {
+            width: 100%;
+        }
+
+        body.water-index-page .navbar-nav {
+            display: flex;
+            justify-content: flex-end; /* Align the dropdown and logout button to the right */
+            width: 100%;
+        }
+
+        body {
+            margin: 0;
+            background: url('{{ url_for("static", filename="images/bg.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .navbar-container {
+            width: 100%;
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 95vh;
+            flex-direction: column;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            padding: 20px; /* Inner padding */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            text-align: center; /* Center text inside the container */
+            width: 400px; /* Adjusted width for the form */
+            max-width: 100%; /* Prevent the form from exceeding the container */
+        }
+
+        label {
+            color: #333; /* Change the label text color */
+            font-weight: bold; /* Make the label bold */
+        }
+
+        input {
+            margin-bottom: 15px; /* Space between input fields */
+            padding: 5px; /* Inner padding */
+            border-radius: 5px; /* Rounded corners */
+            border: 1px solid #ccc; /* Light gray border */
+            width: 100%; /* Full width */
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between; /* Space out buttons */
+            gap: 10px; /* Space between the buttons */
+        }
+
+        input[type="submit" ] {
+            background-color: #007BFF; /* Button background color */
+            color: white; /* Button text color */
+            border: none; /* No border */
+            cursor: pointer; /* Pointer cursor on hover */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+
+        /* Style for the logout link */
+        .back-button {
+            display: block;
+            margin-top: 20px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body class="water-index-page">
+    <div class="navbar-container">
+        {% include 'navbar.html' %}
+    </div>
+
+    <div class="content-wrapper">
+        <h1 style="color: #007BFF;">Water Footprint Calculation</h1>
+        <form method="POST">
+            <label for="crop">Crop Name:</label>
+            <input type="text" name="crop" required>
+            <br>
+            <label for="area">Area (hectares):</label>
+            <input type="number" name="area" step="0.01" required>
+            <br>
+            <label for="blue_cwr">Blue CWR (mm/day):</label>
+            <input type="number" name="blue_cwr" step="0.01" required>
+            <br>
+            <label for="green_cwr">Green CWR (mm/day):</label>
+            <input type="number" name="green_cwr" step="0.01" required>
+            <br>
+            <label for="pollution_load">Pollution Load (kg/ha/day):</label>
+            <input type="number" name="pollution_load" step="0.01" required>
+            <br>
+            <label for="irrigation_efficiency">Irrigation Efficiency (0-1):</label>
+            <input type="number" name="irrigation_efficiency" step="0.01" min="0" max="1" required>
+            <br>
+            <label for="growing_period">Growing Period (days):</label>
+            <input type="number" name="growing_period" required>
+            <br>
+            <input type="submit" value="Calculate">
+            <a href="{{ url_for('dashboard') }}" class="back-button">Back to Dashboard</a>
+        </form>
+    </div>
+</body>
+</html>
