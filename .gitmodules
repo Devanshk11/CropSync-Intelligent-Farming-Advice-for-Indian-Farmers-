@@ -1,0 +1,6 @@
+[submodule "Group2-C3/src/editorFrontend"]
+	path = Group2-C3/src/editorFrontend
+	url = https://github.com/Group2-BE-DS/editorFrontend
+[submodule "Group2-C3/src/editorBackend"]
+	path = Group2-C3/src/editorBackend
+	url = https://github.com/Group2-BE-DS/editorBackend
