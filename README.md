@@ -1,1 +1,1 @@
-# BE-DS-Major-Project-Part2-2024-25
+CropSync-Intelligent-Farming-Advice-for-Indian-Farmers-
